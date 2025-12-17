@@ -1,23 +1,25 @@
 import { Module } from '@nestjs/common';
-
-import { RouterModule, Routes } from '@nestjs/core';
-import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-const route: Routes = [{ path: 'users', module: UsersModule }];
+import { UsersModule } from './users/users.module';
+
 @Module({
   imports: [
-    RouterModule.register(route),
-    UsersModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
-        type: 'postgres',
-        url: process.env.DB_HOST,
-        entities: ['src/**/*.entity.ts'],
-        migrations: ['src/database/migrations/*.migration.ts'],
-        synchronize: false,
-        logging: ['error', 'query'],
+        type: 'mysql',
+        host: '127.0.0.1',
+        port: 3306,
+        username: 'root',
+        password: 'Tt9119573449',  
+        database: 'nextask',        
+        autoLoadEntities: true,  
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        migrations: ['src/database/migrations/*.ts'],
+        synchronize: true,        
+        logging: true,           
       }),
     }),
+    UsersModule,
   ],
 })
 export class AppModule {}
