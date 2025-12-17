@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { RouterModule, Routes } from '@nestjs/core';
+const route: Routes = [{ path: 'users', module: UsersModule }];
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { UsersModule } from './users/users.module';
         logging: true,           
       }),
     }),
+    RouterModule.register(route),
     UsersModule,
   ],
 })
