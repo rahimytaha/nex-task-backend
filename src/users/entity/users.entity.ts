@@ -1,13 +1,13 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt'
 
 @Entity()
-export class UsersEntity {
+export class UsersEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number 
     @Column()
     name:string
-    @Column()
+    @Column({unique:true})
     email:string
     @Column()
     password:string
