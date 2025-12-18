@@ -20,12 +20,19 @@ export class UsersController {
   async myProfile(@UserPayload() { id }: TUserPayload) {
     return this.userService.findById(id);
   }
-  @Post("create")
-  async create(@Body() createDto:CreateUserDto){
-    return this.userService.create(createDto)
+  @Post('create')
+  async create(@Body() createDto: CreateUserDto) {
+    return this.userService.create(createDto);
   }
-  @Put("update/:id")
-  async updateById(@Param("id") id:number,@Body() dto:UpdateUserDto ){
-    return this.userService.update()
+  @Put('update/:id')
+  async updateById(@Param('id') id: number, @Body() dto: UpdateUserDto) {
+    return this.userService.update(id, dto);
+  }
+  @Put('profile')
+  async updateMyProfile(
+    @UserPayload() { id }: TUserPayload,
+    @Body() dto: UpdateUserDto,
+  ) {
+    return this.userService.update(id, dto);
   }
 }

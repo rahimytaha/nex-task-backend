@@ -33,9 +33,9 @@ export class UsersService {
     await user.save();
     return user.id;
   }
-  async update(updateDto: UpdateUserDto): Promise<boolean> {
+  async update(id:number,updateDto: UpdateUserDto): Promise<boolean> {
     const existUser = await this.usersRepository.findOneBy({
-      email: updateDto.email,
+      id
     });
     if (!existUser) throw new ConflictException('this email used before');
     await existUser.save({data:updateDto});
