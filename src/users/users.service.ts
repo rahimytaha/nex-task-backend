@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './entity/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
+import { retry } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -44,14 +45,23 @@ export class UsersService {
     await user.save();
     return true;
   }
-  async findById(id: number):Promise<UsersEntity>  {
+  async findById(id: number): Promise<UsersEntity> {
     const exist = await this.usersRepository.findOneBy({ id });
     if (!exist) throw new NotFoundException('user could not found');
     return exist;
   }
-  async findByEmail(email: string):Promise<UsersEntity> {
+  async findByEmail(email: string): Promise<UsersEntity> {
     const existUser = await this.usersRepository.findOneBy({ email: email });
     if (!existUser) throw new NotFoundException('user could not found');
     return existUser;
+  }
+  async checkUser(email: string, password?: string) {
+    const existUser = await this.usersRepository.findOneBy({ email: email });
+    if (!existUser) {
+      return false;
+    } else if (password && existUser.password != password) {
+      return true;
+    }
+    return false;
   }
 }

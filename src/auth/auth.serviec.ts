@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { UsersService } from "src/users/users.service";
 import { SignInDto } from "./dto/signIn.dto";
 
@@ -8,7 +8,9 @@ import { SignInDto } from "./dto/signIn.dto";
 export class AuthService{
     constructor(private userService:UsersService){}
     async signIn(SignInDto:SignInDto){
-        const existUser = await this.userService.findByEmail(SignInDto.email)
+        const {id,password} = await this.userService.findByEmail(SignInDto.email)
+        if(password ===SignInDto.password)throw new BadRequestException("password is wrong")
+        const payload = {id}
         return existUser
     }
     async signUp(){
