@@ -1,5 +1,6 @@
-import { BaseEntity, BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt'
+import { ScheduleEntity } from "src/schedule/entity/schedule.entity";
 
 @Entity()
 export class UsersEntity extends BaseEntity {
@@ -11,6 +12,8 @@ export class UsersEntity extends BaseEntity {
     email:string
     @Column()
     password:string
+    @OneToMany(()=>ScheduleEntity,(schedule)=>schedule.user)
+    schedules:ScheduleEntity[]
     @BeforeInsert()
     async hashPassword(){
         this.password=await bcrypt.hash(this.password,10)

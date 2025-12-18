@@ -1,0 +1,15 @@
+import { UsersEntity } from "src/users/entity/users.entity";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity()
+export class ScheduleEntity extends BaseEntity{
+    @PrimaryGeneratedColumn()
+    id:number
+    @Column()
+    name:string
+    @Column()
+    description?:string
+
+    @ManyToOne(()=>UsersEntity,(user)=>user.schedules)
+    user:UsersEntity
+}
