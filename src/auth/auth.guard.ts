@@ -3,14 +3,18 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+import { IS_PUBLIC_KEY } from './public.decorator';
+
 
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
- async canActivate(
-    context: ExecutionContext,
-  ):  Promise<boolean>  {
+  constructor(private jwtService: JwtService,private reflector:Reflector) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<Boolean>(IS_PUBLIC_KEY,[context.getHandler(),context.getClass()])
+    if (isPublic) {
+        return true
+    }
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
@@ -18,7 +22,7 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: "123",
+        secret: '123',
       });
       request['user'] = payload;
     } catch {
@@ -26,9 +30,9 @@ export class AuthGuard implements CanActivate {
     }
     return true;
   }
-private extractTokenFromHeader(request: any): string | undefined {
-    const authHeader = request.headers.authorization;  
-    
+  private extractTokenFromHeader(request: any): string | undefined {
+    const authHeader = request.headers.authorization;
+
     if (!authHeader) {
       return undefined;
     }
