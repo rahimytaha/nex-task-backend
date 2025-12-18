@@ -52,7 +52,7 @@ export class UsersService {
     return existUser;
   }
   async checkUser(email: string, password?: string): Promise<Boolean | number> {
-    const existUser = await this.usersRepository.findOneBy({ email: email });
+    const existUser = await this.usersRepository.findOne({ where:{email: email},select:{id:true,password:true} });
     if (!existUser) {
       return false;
     } else if (password &&  !  bcrypt.compare(password,existUser.password)) {

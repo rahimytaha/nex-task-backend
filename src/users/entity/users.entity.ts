@@ -10,7 +10,7 @@ export class UsersEntity extends BaseEntity {
     name:string
     @Column({unique:true})
     email:string
-    @Column()
+    @Column({select:false})
     password:string
     @OneToMany(()=>ScheduleEntity,(schedule)=>schedule.user)
     schedules:ScheduleEntity[]
