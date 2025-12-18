@@ -44,12 +44,12 @@ export class UsersService {
     await user.save();
     return true;
   }
-  async findById(id: number) {
+  async findById(id: number):Promise<UsersEntity>  {
     const exist = await this.usersRepository.findOneBy({ id });
     if (!exist) throw new NotFoundException('user could not found');
     return exist;
   }
-  async findByEmail(email: string) {
+  async findByEmail(email: string):Promise<UsersEntity> {
     const existUser = await this.usersRepository.findOneBy({ email: email });
     if (!existUser) throw new NotFoundException('user could not found');
     return existUser;
