@@ -19,7 +19,7 @@ export class UsersService {
     const data = await this.usersRepository.find();
     return data;
   }
-  async create(createDto: CreateUserDto): Promise<boolean> {
+  async create(createDto: CreateUserDto): Promise<number> {
     const existUser = await this.usersRepository.findOneBy({
       email: createDto.email,
     });
@@ -30,7 +30,7 @@ export class UsersService {
     user.password = createDto.password;
     user.hashPassword();
     await user.save();
-    return true;
+    return user.id;
   }
   async update(createDto: CreateUserDto): Promise<boolean> {
     const existUser = await this.usersRepository.findOneBy({
@@ -55,13 +55,13 @@ export class UsersService {
     if (!existUser) throw new NotFoundException('user could not found');
     return existUser;
   }
-  async checkUser(email: string, password?: string) {
+  async checkUser(email: string, password?: string): Promise<Boolean | number> {
     const existUser = await this.usersRepository.findOneBy({ email: email });
     if (!existUser) {
       return false;
     } else if (password && existUser.password != password) {
-      return true;
+      return false;
     }
-    return false;
+    return existUser.id;
   }
 }
