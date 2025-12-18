@@ -8,6 +8,7 @@ import { UsersEntity } from './entity/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt'
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UsersService {
@@ -32,17 +33,12 @@ export class UsersService {
     await user.save();
     return user.id;
   }
-  async update(createDto: CreateUserDto): Promise<boolean> {
+  async update(updateDto: UpdateUserDto): Promise<boolean> {
     const existUser = await this.usersRepository.findOneBy({
-      email: createDto.email,
+      email: updateDto.email,
     });
-    if (existUser) throw new ConflictException('this email used before');
-    const user = new UsersEntity();
-    user.email = createDto.email;
-    user.name = createDto.name;
-    user.password = createDto.password;
-    user.hashPassword();
-    await user.save();
+    if (!existUser) throw new ConflictException('this email used before');
+    await existUser.save({data:updateDto});
     return true;
   }
   async findById(id: number): Promise<UsersEntity> {
