@@ -11,4 +11,5 @@ export class UsersController{
     async finndAll(){
         return this.userService.findAll()
     }
+    
 }
