@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './entity/users.entity';
 import { Repository } from 'typeorm';
@@ -27,7 +31,7 @@ export class UsersService {
     await user.save();
     return true;
   }
-    async update(createDto: CreateUserDto): Promise<boolean> {
+  async update(createDto: CreateUserDto): Promise<boolean> {
     const existUser = await this.usersRepository.findOneBy({
       email: createDto.email,
     });
@@ -39,5 +43,10 @@ export class UsersService {
     user.hashPassword();
     await user.save();
     return true;
+  }
+  async findById(id: number) {
+    const exist = await this.usersRepository.findOneBy({ id });
+    if (!exist) throw new NotFoundException('user could not found');
+    return exist;
   }
 }
