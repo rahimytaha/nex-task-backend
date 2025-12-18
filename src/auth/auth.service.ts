@@ -18,7 +18,7 @@ export class AuthService {
     const existUser = await this.userService.checkUser(email, password);
     if (!existUser) throw new NotFoundException('email or password is wrong');
     const payload = { id: existUser };
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload,{secret:"123"});
     return { token };
   }
   async signUp({ email, password, name }: signUpDto) {

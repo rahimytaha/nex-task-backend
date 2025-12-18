@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './entity/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
-import { retry } from 'rxjs';
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -59,7 +59,7 @@ export class UsersService {
     const existUser = await this.usersRepository.findOneBy({ email: email });
     if (!existUser) {
       return false;
-    } else if (password && existUser.password != password) {
+    } else if (password &&  !  bcrypt.compare(password,existUser.password)) {
       return false;
     }
     return existUser.id;
