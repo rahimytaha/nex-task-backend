@@ -37,7 +37,7 @@ export class UsersService {
     const existUser = await this.usersRepository.findOneBy({
       id
     });
-    if (!existUser) throw new ConflictException('this email used before');
+    if (!existUser) throw new ConflictException('user could not found');
     await existUser.save({data:updateDto});
     return true;
   }
