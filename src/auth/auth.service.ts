@@ -26,7 +26,7 @@ export class AuthService {
     if (existUser) throw new NotFoundException('email used before');
     const newUser = await this.userService.create({email,password,name})
     const payload = { id: newUser };
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload,{secret:"123"});
     return { token };
   }
 }
