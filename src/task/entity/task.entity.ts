@@ -1,9 +1,9 @@
 import { ScheduleEntity } from 'src/schedule/entity/schedule.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CheckTaskEntity } from './checkTask.entity';
 
 @Entity()
-export class TaskEntity {
+export class TaskEntity extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
   @Column()

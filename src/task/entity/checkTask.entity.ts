@@ -1,8 +1,8 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TaskEntity } from "./task.entity";
 
 @Entity()
-export class CheckTaskEntity{
+export class CheckTaskEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id:number
     @CreateDateColumn({name:"insert_date"})
