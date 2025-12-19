@@ -17,7 +17,7 @@ export class ScheduleEntity extends BaseEntity {
   name: string;
   @Column({nullable:true})
   description?: string;
-  @Column()
+  @Column({nullable:true})
   time: string;
   @ManyToOne(() => UsersEntity, (user) => user.schedules)
   user: UsersEntity;

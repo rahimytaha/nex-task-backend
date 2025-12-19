@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsMilitaryTime, IsOptional, IsString } from "class-validator";
 
 
 export class CreateScheduleDto{
@@ -7,4 +7,7 @@ export class CreateScheduleDto{
     @IsOptional()
     @IsString()
     description?:string
+    @IsOptional()
+    @IsMilitaryTime()
+    time?:string
 }
