@@ -15,15 +15,31 @@ export class ScheduleService {
     const data = await this.scheduleRepository.find();
     return data;
   }
-  async create(dto: CreateScheduleDto, userId?: number) {
-    const newSchedule = new ScheduleEntity();
-    newSchedule.save({ data: { ...dto, userId } });
-    return newSchedule.id;
+  async create(dto: CreateScheduleDto, userId: number) {
+   const newSchedule = this.scheduleRepository.create({
+      ...dto,
+      user:{id:userId}
+    });
+
+    const savedSchedule = await this.scheduleRepository.save(newSchedule);
+
+    return savedSchedule.id;
   }
-  async update(dto: UpdateScheduleDto,id:number, userId?: number) {
+  async update(dto: UpdateScheduleDto,id:number, userId: number) {
     const existSchedule = await this.findById(id,userId)
-    existSchedule.save({ data: dto });
+    Object.assign(existSchedule,dto)
+   await existSchedule.save();
     return existSchedule.id;
+  }
+    async findById(id: number, userId?: number) {
+    const existSchedule = await this.scheduleRepository.findOneBy({
+       user:{id:userId} ,id
+    });
+    if (!existSchedule)
+      throw new NotFoundException(
+        'schedule could not found or this schedule is not for this userId',
+      );
+    return existSchedule
   }
   async delete(id: number,userId?:number) {
     const existSchedule = await this.findById(id,userId)
@@ -36,14 +52,5 @@ export class ScheduleService {
     });
     return existSchedule;
   }
-  async findById(id: number, userId?: number) {
-    const existSchedule = await this.scheduleRepository.findOne({
-      where: { user:{id:userId} },
-    });
-    if (!existSchedule)
-      throw new NotFoundException(
-        'schedule could not found or this schedule is not for this userId',
-      );
-    return existSchedule
-  }
+
 }
