@@ -5,10 +5,11 @@ import { TaskEntity } from './entity/task.entity';
 import { CheckTaskEntity } from './entity/checkTask.entity';
 import { TaskBaseController } from './taskbase.controller';
 import { ScheduleModule } from 'src/schedule/schedule.module';
+import { TaskCheckController } from './taskcheck.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TaskEntity, CheckTaskEntity]),ScheduleModule],
   providers: [TaskService],
-  controllers:[TaskBaseController]
+  controllers:[TaskBaseController,TaskCheckController]
 })
 export class TaskModule {}

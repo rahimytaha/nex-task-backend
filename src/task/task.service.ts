@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './entity/task.entity';
-import { Repository } from 'typeorm';
+import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { CheckTaskEntity } from './entity/checkTask.entity';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { ScheduleService } from 'src/schedule/schedule.service';
 import { UpdateTaskDto } from './dto/updateTask.dto';
+import { addDays, startOfWeek } from 'date-fns';
 
 @Injectable()
 export class TaskService {
@@ -13,7 +14,7 @@ export class TaskService {
     @InjectRepository(TaskEntity)
     private taskRepository: Repository<TaskEntity>,
     @InjectRepository(CheckTaskEntity)
-    private checkTaskEntity: Repository<CheckTaskEntity>,
+    private checkTaskRepository: Repository<CheckTaskEntity>,
     private scheduleService: ScheduleService,
   ) {}
   async findAllTask(): Promise<TaskEntity[]> {
@@ -62,5 +63,56 @@ export class TaskService {
     return this.taskRepository.find({
       where: { schedule: { id: scheduleId, user: { id: userId } } },
     });
+  }
+  async check(taskId: number, userId: number) {
+    const newTaskCheck = this.checkTaskRepository.create({
+      task: { id: taskId, schedule: { user: { id: userId } } },
+    });
+    await newTaskCheck.save();
+    console.log(newTaskCheck);
+  }
+  getDays(date: Date = new Date()): Date[] {
+    const start = startOfWeek(date);
+    const weekDays: Date[] = [];
+    for (let index = 0; index < 7; index++) {
+      weekDays.push(addDays(start, index));
+    }
+    return weekDays;
+  }
+  async findCheckTasksList(
+    userId: number,
+    taskId: number,
+    startTime?: Date,
+    endTime?: Date,
+  ) {
+    const where: any = {
+      task: {
+        id: taskId,
+        schedule: {
+          user: { id: userId },
+        },
+      },
+    };
+
+    if (startTime && endTime) {
+      where.insertDate = Between(startTime, endTime);
+    } else if (startTime) {
+      where.insertDate = MoreThanOrEqual(startTime);
+    } else if (endTime) {
+      where.insertDate = LessThanOrEqual(endTime);
+    }
+
+    const checkTasksList = await this.checkTaskRepository.find({
+      where,
+    });
+    return checkTasksList;
+  }
+  async chartData(scheduleId: number, userId: number) {
+    const days = this.getDays();
+    const tasks = await this.findTaskBySchedule(scheduleId, userId);
+    const i = days.map((el) => {
+      return { time: el };
+    });
+    return { i, tasks };
   }
 }
