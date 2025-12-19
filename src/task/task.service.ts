@@ -109,10 +109,23 @@ export class TaskService {
   }
   async chartData(scheduleId: number, userId: number) {
     const days = this.getDays();
-    const tasks = await this.findTaskBySchedule(scheduleId, userId);
-    const i = days.map((el) => {
-      return { time: el };
-    });
-    return { i, tasks };
+    let tasks = await this.findTaskBySchedule(scheduleId, userId);
+    const ee = tasks[1];
+    let result: any = [];
+    for (let i = 0; i < days.length; i++) {
+      const day = days[i];
+      const checkList = await this.findCheckTasksList(
+        userId,
+        ee.id,
+        days[i - 1],
+        days[i],
+      );
+      let pushData = { day, checkList };
+      pushData[ee.id] = checkList.length > 0 ? true : false;
+      result.push(pushData);
+    }
+    const checkListAll = await this.findCheckTasksList(userId, ee.id);
+
+    return { result, ee, checkListAll };
   }
 }
