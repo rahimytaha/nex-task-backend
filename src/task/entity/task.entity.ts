@@ -8,9 +8,9 @@ export class TaskEntity extends BaseEntity{
   id: number;
   @Column()
   name: string;
-  @Column()
+  @Column({nullable:true})
   description?: string;
-  @Column()
+  @Column({nullable:true})
   iconAddress?: string;
   @ManyToOne(() => ScheduleEntity, (schedule) => schedule.tasks)
   schedule: ScheduleEntity;
