@@ -9,9 +9,9 @@ export class TaskEntity {
   @Column()
   name: string;
   @Column()
-  description: string;
+  description?: string;
   @Column()
-  iconAddress: string;
+  iconAddress?: string;
   @ManyToOne(() => ScheduleEntity, (schedule) => schedule.tasks)
   schedule: ScheduleEntity;
   @OneToMany(()=>CheckTaskEntity,(checkTask)=>checkTask.task)
