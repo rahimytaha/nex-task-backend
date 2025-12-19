@@ -5,10 +5,12 @@ import { APP_GUARD, RouterModule, Routes } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
 import { ScheduleModule } from './schedule/schedule.module';
+import { TaskModule } from './task/task.module';
 const route: Routes = [
   { path: 'users', module: UsersModule },
   { path: 'auth', module: AuthModule },
   { path: 'schedule', module: ScheduleModule },
+  { path: 'task', module: TaskModule },
 ];
 
 @Module({
@@ -31,6 +33,7 @@ const route: Routes = [
     RouterModule.register(route),
     UsersModule,
     AuthModule,
+    TaskModule,
     ScheduleModule
   ],
   providers: [
