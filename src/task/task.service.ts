@@ -19,7 +19,7 @@ export class TaskService {
   async findAllTask(): Promise<TaskEntity[]> {
     return this.taskRepository.find();
   }
-  async findTaskById(id: number, userId?: number) {
+  async findTaskById(id: number, userId?: number): Promise<TaskEntity> {
     const existTask = await this.taskRepository.findOneBy({
       id,
       schedule: { user: { id: userId } },
@@ -28,7 +28,6 @@ export class TaskService {
       throw new NotFoundException(
         'task could not found or this task is not for this userId',
       );
-      existTask.
     return existTask;
   }
   async createTask(
@@ -41,16 +40,27 @@ export class TaskService {
       description,
       schedule: { id: scheduleId },
     });
+    await newTask.save();
     return newTask;
   }
-    async updateTask(
-    dto: UpdateTaskDto,id:number,
+  async updateTask(
+    dto: UpdateTaskDto,
+    id: number,
     userId: number,
   ): Promise<TaskEntity> {
-   const existTask= await this.findTaskById(id, userId);
-    Object.assign(existTask,dto)
-    existTask.sa
+    const existTask = await this.findTaskById(id, userId);
+    Object.assign(existTask, dto);
+    await existTask.save();
     return existTask;
   }
-
+  async deleteTask(id: number, userId: number) {
+    const existTask = await this.findTaskById(id, userId);
+    await existTask.remove();
+    return true;
+  }
+  async findTaskBySchedule(scheduleId: number, userId: number) {
+    return this.taskRepository.find({
+      where: { schedule: { id: scheduleId, user: { id: userId } } },
+    });
+  }
 }
