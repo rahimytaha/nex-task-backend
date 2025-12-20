@@ -22,7 +22,8 @@ Powered by NestJS, the project follows best practices with a clean, modular, and
 - **Jest** — Testing framework
 
 ## Project Structure
-```
+
+```plaintext
 nex-task-backend/
 ├── .vscode/                  # Recommended VS Code settings and extensions
 ├── src/                      # Main source code
@@ -109,5 +110,11 @@ Contributions are welcome! Open issues, submit pull requests, or suggest improve
 - Official NestJS Documentation: https://docs.nestjs.com
 - TypeScript Documentation: https://www.typescriptlang.org
 
+## License
+MIT License — Free to use, modify, and distribute.
+
+---
 
 **Built with ❤️ by rahimytaha**  
+If this project helps you, don't forget to ⭐ star the repo! 🚀
+```
