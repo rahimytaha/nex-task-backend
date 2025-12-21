@@ -1,62 +1,67 @@
-```markdown
 # NexTask Backend 🚀
 
-A powerful, scalable, and secure backend API for a modern task management application, built with **NestJS** and **TypeScript**.
+**A professional, secure, and scalable task management backend built with NestJS and TypeScript**
 
-**NexTask Backend** provides a complete RESTful API for managing tasks, users, checklists, deadlines, and analytics. With modular architecture, it includes authentication, database persistence, scheduling (e.g., reminders), and advanced task features like dynamic handling and chart data.
-
-Perfect for building a full-featured task management app (To-Do List + Team Collaboration).
+NexTask Backend is a full-featured RESTful API for modern task management applications. It supports user authentication, task CRUD operations, checklists, deadlines, scheduling/reminders, and analytics with a clean, modular architecture ready for production.
 
 ## Features
-- 🏗️ **Modular NestJS Architecture** — Clean separation with dedicated modules for tasks, auth, users, database, and scheduling
-- 🔐 **Authentication & Authorization** — Secure JWT-based auth with Guards
-- 🗄️ **Database Integration** — Configurable via environment variables (TypeORM or similar)
+- 🏗️ **Modular Architecture** — Separate modules for auth, tasks, users, database, scheduling, and common utilities
+- 🔐 **JWT Authentication** — Secure login/register with Guards and protected routes
+- 🗄️ **Database Persistence** — Configured via environment variables (TypeORM supported)
 - ⏰ **Task Scheduling** — Cron jobs and reminders for deadlines
-- 📝 **Advanced Task Management** — Dynamic tasks, checklists, priorities, and progress tracking
-- 📊 **Chart & Analytics Support** — Data aggregation for dashboards
-- 🧪 **Comprehensive Testing** — Unit and end-to-end tests with Jest
-- ⚙️ **Professional Tooling** — ESLint (flat config), Prettier, Nest CLI
-- ☁️ **Deployment Ready** — Easy to containerize or deploy on AWS/Heroku/Vercel
+- 📝 **Advanced Task Management** — Dynamic tasks, checklists, priorities, progress tracking, and chart data support
+- 📊 **Analytics Ready** — Data aggregation for dashboards
+- 🧪 **Comprehensive Testing** — Unit and e2e tests with Jest
+- ⚙️ **Professional Tooling** — ESLint (flat config), Prettier, Winston logging, global ValidationPipe
+- 🔒 **Security Best Practices** — Helmet, CORS, rate limiting ready, sensitive data masking in logs
+- 📚 **Beautiful API Documentation** — Swagger/OpenAPI with blue theme, Bearer auth support, and detailed examples
+- ☁️ **Deployment Ready** — Easy to containerize (Docker support recommended)
 
 ## Technologies Used
 - **NestJS** — Progressive Node.js framework
 - **TypeScript** — Type-safe development
-- **Node.js** — Runtime
-- **Jest** — Testing
-- Likely: JWT for auth, TypeORM/Prisma for DB, class-validator for DTOs
+- **Winston** — Advanced logging with file/console output
+- **class-validator & class-transformer** — Input validation
+- **@nestjs/swagger** — API documentation
+- **JWT** — Authentication
+- **Jest** — Testing framework
 
 ## Project Structure
 ```
 nex-task-backend/
-├── .vscode/                  # VS Code settings and extensions
+├── public/                   # Static files (Swagger custom theme)
+│   └── swagger/
+│       └── theme-feeling-blue.css  # Custom blue theme for Swagger UI
 ├── src/                      # Main source code
-│   ├── auth/                 # Authentication module (JWT, Guards, Strategies)
-│   ├── commen/               # Common utilities (filters, interceptors, pipes) – note: likely "common"
-│   ├── database/             # Database configuration and ORM setup (.env support)
-│   ├── schedule/             # Scheduling module (@nestjs/schedule for cron/reminders)
+│   ├── auth/                 # Authentication module (JWT, Guards, login/register)
+│   ├── common/               # Shared utilities (interceptors, pipes, logger, filters)
+│   │   ├── interceptors/     # LoggingInterceptor for request/response logging
+│   │   └── logger/           # Winston custom logger configuration
+│   ├── database/             # Database configuration (.env support)
+│   ├── schedule/             # Scheduling module for reminders/cron jobs
 │   ├── task/                 # Core task management (controllers, services, DTOs, entities)
-│   ├── users/                # User management (profiles, registration)
-│   ├── app.controller.ts     # Root controller
-│   ├── app.controller.spec.ts# Unit test for root controller
-│   ├── app.module.ts         # Root module importing all features
-│   ├── app.service.ts        # Root service
-│   └── main.ts               # Application bootstrap (pipes, CORS, etc.)
-├── test/                     # Tests (unit + e2e)
-│   └── app.e2e-spec.ts       # End-to-end tests
+│   ├── users/                # User management and profiles
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts               # Bootstrap with Swagger, ValidationPipe, Winston logger
+├── test/                     # Unit and e2e tests
+│   └── app.e2e-spec.ts
+├── .env.example              # Environment variables template
 ├── .gitignore
-├── .prettierrc               # Formatting rules
-├── eslint.config.mjs         # ESLint flat config
-├── nest-cli.json             # Nest CLI settings
-├── package.json              # Dependencies and scripts
-├── tsconfig.json             # TypeScript config
-├── tsconfig.build.json       # Build config
-└── README.md                 # This file
+├── .prettierrc
+├── eslint.config.mjs
+├── nest-cli.json
+├── package.json
+├── tsconfig.json
+├── tsconfig.build.json
+└── README.md                 
 ```
 
 ## Prerequisites
 - Node.js v18 or higher
 - npm or pnpm/yarn
-- Database (PostgreSQL/MySQL/SQLite – configured via .env)
+- Database (PostgreSQL recommended, SQLite for development)
 
 ## Installation & Running Locally
 ```bash
@@ -65,9 +70,9 @@ cd nex-task-backend
 
 npm install
 
-# Create .env file (use .env.example if provided)
+# Copy and configure environment variables
 cp .env.example .env
-# Configure DB_URL, JWT_SECRET, etc.
+# Edit .env with your DB_URL, JWT_SECRET, etc.
 
 # Development mode (hot-reload)
 npm run start:dev
@@ -77,48 +82,51 @@ npm run build
 npm run start:prod
 ```
 
-API available at `http://localhost:3000`
+Server runs on `http://localhost:3000` by default.
 
-## Scripts
-```bash
-npm run start          # Production
-npm run start:dev      # Development
-npm run start:debug    # Debug
-npm run build          # Build
-npm run test           # Unit tests
-npm run test:e2e       # E2E tests
-npm run test:cov       # Coverage
-npm run lint           # Lint
-```
+## API Documentation
+Visit **http://localhost:3000/api** for interactive Swagger UI with:
+- Beautiful blue theme
+- Bearer JWT authorization (enter token without "Bearer" prefix)
+- Detailed examples and validation
+
+## Logging
+- Professional Winston logging with request/response tracking via global LoggingInterceptor
+- Logs to console (colored) and files (`logs/error.log`, `logs/combined.log`)
+- Context-aware with timestamps, levels (error, warn, info, debug), and stack traces
 
 ## Testing
 ```bash
-npm run test           # Unit
-npm run test:e2e       # End-to-end
+npm run test           # Unit tests
+npm run test:watch     # Watch mode
+npm run test:e2e       # End-to-end tests
 npm run test:cov       # Coverage report
 ```
 
 ## Deployment
-Ready for Docker, Vercel, AWS, or Heroku. For NestJS on AWS:
-```bash
-npm install -g @nestjs/mau
-mau deploy
-```
+- Ready for Docker/Kubernetes
+- Recommended: Add Dockerfile and docker-compose.yml
+- For AWS: Use `@nestjs/mau`
 
-## API Documentation
-(Recommended: Add `@nestjs/swagger` for auto-generated OpenAPI docs at `/api`)
+## Security Notes
+- Global ValidationPipe with whitelist enabled
+- Protected routes with AuthGuard('jwt')
+- Sensitive data masked in logs
+- Add Helmet and Throttler for production
 
 ## Contributing
-Pull requests welcome! Open issues for bugs or features.
+Contributions welcome! Open issues or submit pull requests.
 
 ## Resources
-- NestJS Docs: https://docs.nestjs.com
-- TypeScript: https://www.typescriptlang.org
+- NestJS Documentation: https://docs.nestjs.com
+- Swagger Module: https://docs.nestjs.com/openapi/introduction
 
 ## License
-MIT License
+MIT License — Free to use, modify, and distribute.
 
 ---
 
 **Built with ❤️ by rahimytaha**  
-Star the repo if you like it! ⭐ Let's make task management awesome 🚀
+This project evolved from a basic NestJS starter to a production-ready task management backend with authentication, advanced logging, beautiful Swagger docs, and modular design.  
+
+If you find it useful, give it a ⭐ star! Let's build amazing task apps together 🚀
