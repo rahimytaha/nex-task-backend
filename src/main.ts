@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import { winstonConfig } from './commen/logger/winston.config';
 import { LoggingInterceptor } from './commen/interceptors/logging.interceptor';
+import { ResponseInterceptor } from './commen/interceptors/response.interceptor';
+import { AuthService } from './auth/auth.service';
 
 async function bootstrap() {
   const config = new DocumentBuilder()
@@ -13,10 +15,13 @@ async function bootstrap() {
     .addTag('users')
     .build();
 
-  const app = await NestFactory.create(AppModule,{logger:WinstonModule.createLogger(winstonConfig)});
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger(winstonConfig),
+  });
   const documenntFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documenntFactory);
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new ResponseInterceptor)
+  // app.useGlobalInterceptors(new LoggingInterceptor(AuthService));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

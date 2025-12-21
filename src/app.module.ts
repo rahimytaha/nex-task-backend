@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { APP_GUARD, RouterModule, Routes } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR, RouterModule, Routes } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
 import { ScheduleModule } from './schedule/schedule.module';
 import { TaskModule } from './task/task.module';
+import { LoggingInterceptor } from './commen/interceptors/logging.interceptor';
 const route: Routes = [
   { path: 'users', module: UsersModule },
   { path: 'auth', module: AuthModule },
@@ -41,6 +42,10 @@ const route: Routes = [
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    {
+      provide:APP_INTERCEPTOR,
+      useClass:LoggingInterceptor
+    }
   ],
 })
 export class AppModule {}
