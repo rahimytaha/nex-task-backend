@@ -7,6 +7,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { ScheduleModule } from './schedule/schedule.module';
 import { TaskModule } from './task/task.module';
 import { LoggingInterceptor } from './commen/interceptors/logging.interceptor';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 const route: Routes = [
   { path: 'users', module: UsersModule },
   { path: 'auth', module: AuthModule },
@@ -16,6 +18,7 @@ const route: Routes = [
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({rootPath:join(__dirname,"..",'public')}),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'mysql',

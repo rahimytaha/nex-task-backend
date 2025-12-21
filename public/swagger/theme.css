@@ -1,0 +1,92 @@
+.swagger-ui .topbar {
+  background-color: #89bf04;
+  background: -webkit-linear-gradient(top,#547f00 0,#89bf04 100%);
+  background: linear-gradient(to bottom,#547f00 0,#89bf04 100%);
+}
+
+.swagger-ui .topbar a {
+  max-width: 300px;
+}
+
+.swagger-ui .topbar .download-url-wrapper input {
+  min-width: 300px;
+}
+
+.swagger-ui .info a {
+  color: #547f00;
+}
+
+.swagger-ui .info .title small pre {
+  background-color: #547f00;
+}
+
+.swagger-ui .models .model-container {
+  background-color: rgba(84,127,0,.05);
+}
+
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+  background: #547f00;
+}
+
+.swagger-ui .opblock.opblock-post .tab-header .tab-item.active h4 span:after {
+  background: #547f00;
+}
+
+.swagger-ui .opblock.opblock-put .opblock-summary-method {
+  background: #e2a700;
+}
+
+.swagger-ui .opblock.opblock-put .tab-header .tab-item.active h4 span:after {
+  background: #e2a700;
+}
+
+.swagger-ui .opblock.opblock-delete .opblock-summary-method {
+  background: #c63d2b;
+}
+
+.swagger-ui .opblock.opblock-delete .tab-header .tab-item.active h4 span:after {
+  background: #c63d2b;
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+  background: #0f6ab4;
+}
+
+.swagger-ui .opblock.opblock-get .tab-header .tab-item.active h4 span:after {
+  background: #0f6ab4;
+}
+
+.swagger-ui .btn {
+  color: #547f00;
+}
+
+.swagger-ui .btn:hover {
+  color: #89bf04;
+}
+
+.swagger-ui .btn.authorize {
+  color: #fff;
+  background-color: #547f00;
+}
+
+.swagger-ui .btn.authorize:hover {
+  background-color: #89bf04;
+}
+
+.swagger-ui table thead tr td,
+.swagger-ui table thead tr th {
+  color: #547f00;
+}
+
+.swagger-ui .dialog-ux .modal-ux-header {
+  border-bottom: 1px solid #547f00;
+}
+
+.swagger-ui .dialog-ux .modal-ux-header .close-modal {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjNTQ3ZjAwIj48cGF0aCBkPSJNMTkgNi40MUwxNy41OSA1IDEyIDEwLjU5IDYuNDEgNSAyIDYuNDEgNy41OSAxMiAyIDE3LjU5IDUuNDEgMTkgMTIgMTMuNDEgMTcuNTkgMTkgMTkgMTcuNTkgMTMuNDEgMTIgMTkuMTkgNi40MSAxNy41OSA1IDEyIDEwLjU5eiIvPjwvc3ZnPg==);
+}
+
+.swagger-ui .opblock-description pre,
+.swagger-ui .opblock-external-docs-wrapper pre {
+  background: rgba(84,127,0,.05);
+}

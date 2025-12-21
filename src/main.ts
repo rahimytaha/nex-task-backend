@@ -44,7 +44,8 @@ async function bootstrap() {
     swaggerOptions: {
       persistAuthorization: true,
     },
-    customCss: '.swagger-ui .topbar { background-color: #1a1a1a; }',
+    customCssUrl:"/swagger/theme.css",
+    // customCss: '.swagger-ui .topbar { background-color: #1a1a1a; }',
     customSiteTitle: 'NexTask API Docs',
   });
   app.useGlobalInterceptors(new ResponseInterceptor());
