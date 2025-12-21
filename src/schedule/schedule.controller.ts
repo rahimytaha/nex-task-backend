@@ -12,8 +12,10 @@ import { CreateScheduleDto } from './dto/createSchedule.dto';
 import { UserPayload } from 'src/commen/decorator/user.decorator';
 import type { TUserPayload } from 'src/commen/type/userPayload';
 import { UpdateScheduleDto } from './dto/updateSchedule.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller()
+@ApiBearerAuth('JWT-auth')
 export class ScheduleController {
   constructor(private scheduleService: ScheduleService) {}
   @Get('/all')

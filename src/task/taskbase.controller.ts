@@ -12,8 +12,10 @@ import { UserPayload } from 'src/commen/decorator/user.decorator';
 import type { TUserPayload } from 'src/commen/type/userPayload';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { UpdateTaskDto } from './dto/updateTask.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('base')
+@ApiBearerAuth('JWT-auth')
 export class TaskBaseController {
   constructor(private taskService: TaskService) {}
   @Get('all')

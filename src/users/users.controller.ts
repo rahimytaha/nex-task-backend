@@ -4,8 +4,10 @@ import { UserPayload } from 'src/commen/decorator/user.decorator';
 import type { TUserPayload } from 'src/commen/type/userPayload';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller()
+@ApiBearerAuth('JWT-auth')
 export class UsersController {
   constructor(private userService: UsersService) {}
   @Get('all')
