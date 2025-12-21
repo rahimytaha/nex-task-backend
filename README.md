@@ -1,63 +1,62 @@
 ```markdown
 # NexTask Backend 🚀
 
-A powerful and scalable backend API for a modern task management application, built with **NestJS** and **TypeScript**.
+A powerful, scalable, and secure backend API for a modern task management application, built with **NestJS** and **TypeScript**.
 
-This is the backend repository for **NexTask** — a professional task management system. It provides RESTful APIs for managing tasks, including advanced features like dynamic task handling, checklists, and chart data integration.
+**NexTask Backend** provides a complete RESTful API for managing tasks, users, checklists, deadlines, and analytics. With modular architecture, it includes authentication, database persistence, scheduling (e.g., reminders), and advanced task features like dynamic handling and chart data.
 
-Powered by NestJS, the project follows best practices with a clean, modular, and production-ready architecture.
+Perfect for building a full-featured task management app (To-Do List + Team Collaboration).
 
 ## Features
-- 🏗️ **Modular NestJS Architecture** — Clear separation of concerns
-- 📝 **Full TypeScript Support** — Type-safe code for reliability
+- 🏗️ **Modular NestJS Architecture** — Clean separation with dedicated modules for tasks, auth, users, database, and scheduling
+- 🔐 **Authentication & Authorization** — Secure JWT-based auth with Guards
+- 🗄️ **Database Integration** — Configurable via environment variables (TypeORM or similar)
+- ⏰ **Task Scheduling** — Cron jobs and reminders for deadlines
+- 📝 **Advanced Task Management** — Dynamic tasks, checklists, priorities, and progress tracking
+- 📊 **Chart & Analytics Support** — Data aggregation for dashboards
 - 🧪 **Comprehensive Testing** — Unit and end-to-end tests with Jest
-- ⚙️ **Modern Tooling** — ESLint (flat config), Prettier, and Nest CLI
-- 📊 **Advanced Task Management** — Dynamic tasks, checklist support, and chart data functions
-- ☁️ **Deployment Ready** — Easy to build and deploy on various platforms
+- ⚙️ **Professional Tooling** — ESLint (flat config), Prettier, Nest CLI
+- ☁️ **Deployment Ready** — Easy to containerize or deploy on AWS/Heroku/Vercel
 
 ## Technologies Used
 - **NestJS** — Progressive Node.js framework
-- **TypeScript** — Strongly typed superset of JavaScript
-- **Node.js** — Server runtime
-- **Jest** — Testing framework
+- **TypeScript** — Type-safe development
+- **Node.js** — Runtime
+- **Jest** — Testing
+- Likely: JWT for auth, TypeORM/Prisma for DB, class-validator for DTOs
 
 ## Project Structure
-
-```plaintext
-nex-task-backend/
-├── .vscode/                  # Recommended VS Code settings and extensions
-├── src/                      # Main source code
-│   ├── main.ts               # Application entry point and bootstrap
-│   ├── app.module.ts         # Root module importing all features
-│   ├── app.controller.ts     # Root controller (e.g., health check)
-│   ├── app.service.ts        # Root service (if needed)
-│   └── ...                   # Feature modules (tasks with dynamic logic, checklists, etc.)
-├── test/                     # Test suite
-│   ├── app.e2e-spec.ts       # End-to-end tests example
-│   └── ...                   # Unit tests for services and controllers
-├── .gitignore                # Files and folders to ignore in Git
-├── .prettierrc               # Code formatting rules
-├── eslint.config.mjs         # ESLint configuration (modern flat format)
-├── nest-cli.json             # NestJS CLI settings
-├── package.json              # Project dependencies and scripts
-├── package-lock.json         # Exact dependency versions
-├── tsconfig.json             # TypeScript compiler options
-├── tsconfig.build.json       # TypeScript options for production build
-└── README.md                 # This documentation file
 ```
-
-### Key Files & How They Work
-- **`src/main.ts`**: Bootstraps the Nest application, enables global pipes, interceptors, and configurations.
-- **`src/app.module.ts`**: The root module that organizes and imports all feature modules (e.g., TasksModule).
-- **Feature Modules** (inside `src/`): Follow NestJS conventions — controllers handle routes, services contain business logic, DTOs validate input, and entities define data models.
-- **`test/`**: Jest-powered tests ensuring code quality (unit tests for individual components, e2e for full API flows).
-- **Configuration files**: `tsconfig*.json`, `eslint.config.mjs`, `.prettierrc` keep code consistent and error-free.
-
-The project evolved from a standard NestJS template with custom enhancements for task checklists and dynamic data handling.
+nex-task-backend/
+├── .vscode/                  # VS Code settings and extensions
+├── src/                      # Main source code
+│   ├── auth/                 # Authentication module (JWT, Guards, Strategies)
+│   ├── commen/               # Common utilities (filters, interceptors, pipes) – note: likely "common"
+│   ├── database/             # Database configuration and ORM setup (.env support)
+│   ├── schedule/             # Scheduling module (@nestjs/schedule for cron/reminders)
+│   ├── task/                 # Core task management (controllers, services, DTOs, entities)
+│   ├── users/                # User management (profiles, registration)
+│   ├── app.controller.ts     # Root controller
+│   ├── app.controller.spec.ts# Unit test for root controller
+│   ├── app.module.ts         # Root module importing all features
+│   ├── app.service.ts        # Root service
+│   └── main.ts               # Application bootstrap (pipes, CORS, etc.)
+├── test/                     # Tests (unit + e2e)
+│   └── app.e2e-spec.ts       # End-to-end tests
+├── .gitignore
+├── .prettierrc               # Formatting rules
+├── eslint.config.mjs         # ESLint flat config
+├── nest-cli.json             # Nest CLI settings
+├── package.json              # Dependencies and scripts
+├── tsconfig.json             # TypeScript config
+├── tsconfig.build.json       # Build config
+└── README.md                 # This file
+```
 
 ## Prerequisites
 - Node.js v18 or higher
-- npm (or yarn/pnpm)
+- npm or pnpm/yarn
+- Database (PostgreSQL/MySQL/SQLite – configured via .env)
 
 ## Installation & Running Locally
 ```bash
@@ -66,7 +65,11 @@ cd nex-task-backend
 
 npm install
 
-# Development mode (with hot-reload)
+# Create .env file (use .env.example if provided)
+cp .env.example .env
+# Configure DB_URL, JWT_SECRET, etc.
+
+# Development mode (hot-reload)
 npm run start:dev
 
 # Production mode
@@ -74,47 +77,48 @@ npm run build
 npm run start:prod
 ```
 
-The server runs on `http://localhost:3000` by default.
+API available at `http://localhost:3000`
 
-## Available Scripts
+## Scripts
 ```bash
-npm run start          # Run in production mode
-npm run start:dev      # Development with watch mode
-npm run start:debug    # Debug mode
-npm run build          # Compile TypeScript to JavaScript
-npm run test           # Run unit tests
-npm run test:watch     # Tests in watch mode
-npm run test:e2e       # End-to-end tests
-npm run test:cov       # Test coverage report
-npm run lint           # Run ESLint
+npm run start          # Production
+npm run start:dev      # Development
+npm run start:debug    # Debug
+npm run build          # Build
+npm run test           # Unit tests
+npm run test:e2e       # E2E tests
+npm run test:cov       # Coverage
+npm run lint           # Lint
 ```
 
 ## Testing
 ```bash
-npm run test           # Unit tests
-npm run test:e2e       # End-to-end tests
+npm run test           # Unit
+npm run test:e2e       # End-to-end
 npm run test:cov       # Coverage report
 ```
 
 ## Deployment
-The project is ready for deployment on platforms like Vercel, AWS, or Heroku. For AWS, you can use NestJS's official Mau tool:
+Ready for Docker, Vercel, AWS, or Heroku. For NestJS on AWS:
 ```bash
 npm install -g @nestjs/mau
 mau deploy
 ```
 
+## API Documentation
+(Recommended: Add `@nestjs/swagger` for auto-generated OpenAPI docs at `/api`)
+
 ## Contributing
-Contributions are welcome! Open issues, submit pull requests, or suggest improvements.
+Pull requests welcome! Open issues for bugs or features.
 
 ## Resources
-- Official NestJS Documentation: https://docs.nestjs.com
-- TypeScript Documentation: https://www.typescriptlang.org
+- NestJS Docs: https://docs.nestjs.com
+- TypeScript: https://www.typescriptlang.org
 
 ## License
-MIT License — Free to use, modify, and distribute.
+MIT License
 
 ---
 
 **Built with ❤️ by rahimytaha**  
-If this project helps you, don't forget to ⭐ star the repo! 🚀
-```
+Star the repo if you like it! ⭐ Let's make task management awesome 🚀
