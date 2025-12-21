@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './entity/task.entity';
 import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
@@ -65,6 +65,8 @@ export class TaskService {
     });
   }
   async check(taskId: number, userId: number) {
+          throw new InternalServerErrorException()
+
     const isChecked = await this.checkIsCheckTask(userId,taskId)
     if (isChecked)  throw new ConflictException("your task already is checked")
     const newTaskCheck = this.checkTaskRepository.create({
