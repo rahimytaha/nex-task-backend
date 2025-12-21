@@ -9,6 +9,7 @@ import { TaskModule } from './task/task.module';
 import { LoggingInterceptor } from './commen/interceptors/logging.interceptor';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 const route: Routes = [
   { path: 'users', module: UsersModule },
   { path: 'auth', module: AuthModule },
@@ -19,20 +20,32 @@ const route: Routes = [
 @Module({
   imports: [
     ServeStaticModule.forRoot({rootPath:join(__dirname,"..",'public')}),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
-        type: 'mysql',
-        host: '127.0.0.1',
-        port: 3306,
-        username: 'root',
-        password: 'Tt9119573449',
-        database: 'nextask',
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres' as const,
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         migrations: ['src/database/migrations/*.ts'],
-        synchronize: true,
-        logging: true,
+        synchronize: configService.get<string>('NODE_ENV') !== 'production', 
+        logging: configService.get<string>('NODE_ENV') !== 'production',
+        ssl: configService.get<boolean>('DB_SSL')
+          ? {
+              rejectUnauthorized: false, // برای Neon معمولاً کافیه
+              channelBinding: configService.get<string>('DB_CHANNEL_BINDING'),
+            }
+          : false,
       }),
+      inject: [ConfigService],
     }),
     RouterModule.register(route),
     UsersModule,
