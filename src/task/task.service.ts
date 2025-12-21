@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './entity/task.entity';
 import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
@@ -6,7 +6,7 @@ import { CheckTaskEntity } from './entity/checkTask.entity';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { ScheduleService } from 'src/schedule/schedule.service';
 import { UpdateTaskDto } from './dto/updateTask.dto';
-import { addDays, startOfWeek } from 'date-fns';
+import { addDays, endOfDay, endOfToday, startOfDay, startOfToday, startOfWeek } from 'date-fns';
 
 @Injectable()
 export class TaskService {
@@ -65,11 +65,13 @@ export class TaskService {
     });
   }
   async check(taskId: number, userId: number) {
+    const isChecked = await this.checkIsCheckTask(userId,taskId)
+    if (isChecked)  throw new ConflictException("your task already is checked")
     const newTaskCheck = this.checkTaskRepository.create({
       task: { id: taskId, schedule: { user: { id: userId } } },
     });
     await newTaskCheck.save();
-    console.log(newTaskCheck);
+    return newTaskCheck.id;
   }
   getDays(date: Date = new Date()): Date[] {
     const start = startOfWeek(date);
@@ -116,16 +118,37 @@ export class TaskService {
       let pushData = { day };
       for (let e = 0; e < tasks.length; e++) {
         const task = tasks[e];
-        const checkList = await this.findCheckTasksList(
+
+        pushData[task.id] = await this.checkIsCheckTask(
           userId,
           task.id,
           days[i - 1],
           days[i],
         );
-        pushData[task.id] = checkList.length > 0 ? true : false;
         result.push(pushData);
       }
     }
     return result;
   }
+  async checkIsCheckTask(
+    userId: number,
+    taskId: number,
+    startDate?: Date,
+    endDate?: Date,
+  ): Promise<Boolean> {
+    if (!startDate) {
+      startDate = startOfToday()
+    }
+    if (!endDate) {
+      endDate = endOfToday()
+    }
+    const checkList = await this.findCheckTasksList(
+      userId,
+      taskId,
+      startDate,
+      endDate,
+    );
+    return checkList.length > 0 ? true : false;
+  }
+  
 }
